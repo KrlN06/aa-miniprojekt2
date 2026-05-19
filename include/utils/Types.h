@@ -5,4 +5,10 @@
 #ifndef PROJEKT2_NALEPA_PETELICKI_TYPES_H
 #define PROJEKT2_NALEPA_PETELICKI_TYPES_H
 
+#pragma once
+
+#include <cstdint>
+
+using Bitboard = uint64_t;
+
 #endif //PROJEKT2_NALEPA_PETELICKI_TYPES_H

@@ -7,6 +7,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(Projekt2_Nalepa_Petelicki
     src/main.cpp
+        src/board/Board.cpp
+        include/board/Board.h
+        include/utils/BitboardUtils.h
+        src/utils/BitboardUtils.cpp
+        include/board/Square.h
+        include/pieces/Pieces.h
 )
 
 target_include_directories(Projekt2_Nalepa_Petelicki PRIVATE include)

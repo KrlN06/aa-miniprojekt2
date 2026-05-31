@@ -8,7 +8,7 @@
 
 void setBit(Bitboard& bb, int square);
 void clearBit(Bitboard& bb, int square);
-bool getBit(Bitboard& bb, int square);
+bool getBit(const Bitboard& bb, int square);
 void printBitboard(Bitboard bb);
 
 #endif //PROJEKT2_NALEPA_PETELICKI_BITBOARDUTILS_H

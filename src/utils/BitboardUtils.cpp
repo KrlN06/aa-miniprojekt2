@@ -16,7 +16,7 @@ void clearBit(Bitboard& bb, int square) {
     bb &= ~(1ULL << square);
 }
 
-bool getBit(Bitboard& bb, int square) {
+bool getBit(const Bitboard& bb, int square) {
 
     return (bb & (1ULL << square)) != 0;
 }

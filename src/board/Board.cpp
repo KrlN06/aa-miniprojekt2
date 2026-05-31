@@ -2,9 +2,9 @@
 // Created by Karol Nalepa on 18/05/2026.
 //
 
-#include "../../include/board/Board.h"
-#include  "../include/utils/BitboardUtils.h"
-#include "board/Square.h"
+#include "board/Board.h"
+#include "utils/BitboardUtils.h"
+#include <iostream>
 
 void Board::setupStartingPosition() {
 
@@ -89,11 +89,11 @@ void Board::setupStartingPosition() {
 
 }
 
-bool Board::isOccupied(int square) {
+bool Board::isOccupied(int square) const {
     return getBit(occupied, square);
 }
 
-Piece Board::getPiece(int square) {
+Piece Board::getPiece(int square) const {
 
     if (getBit(whitePawns, square)) {
         return WHITE_PAWN;
@@ -146,3 +146,146 @@ Piece Board::getPiece(int square) {
     return NONE;
 }
 
+void Board::printBoard() const {
+    for (int rank = 7; rank >= 0; rank--) {
+        for (int file = 0; file < 8; file++) {
+            int square = rank * 8 + file;
+            Piece piece = getPiece(square);
+
+            if (piece == WHITE_KING) {
+                std::cout << "K ";
+            } else if (piece == WHITE_QUEEN) {
+                std::cout << "Q ";
+            } else if (piece == WHITE_BISHOP) {
+                std::cout << "B ";
+            } else if (piece == WHITE_ROOK) {
+                std::cout << "R ";
+            } else if (piece == WHITE_KNIGHT) {
+                std::cout << "N ";
+            } else if (piece == WHITE_PAWN) {
+                std::cout << "P ";
+            } else if (piece == BLACK_PAWN) {
+                std::cout << "p ";
+            } else if (piece == BLACK_KNIGHT) {
+                std::cout << "n ";
+            } else if (piece == BLACK_BISHOP) {
+                std::cout << "b ";
+            } else if (piece == BLACK_ROOK) {
+                std::cout << "r ";
+            } else if (piece == BLACK_KING) {
+                std::cout << "k ";
+            } else if (piece == BLACK_QUEEN) {
+                std::cout << "q ";
+            } else {
+                std::cout << ". ";
+            }
+        }
+
+        std::cout << std::endl;
+    }
+}
+
+bool Board::isWhitePiece(int square) const
+{
+    return getBit(whitePieces, square);
+}
+
+bool Board::isBlackPiece(int square) const
+{
+    return getBit(blackPieces, square);
+}
+
+void Board::makeMove(const Move &move) {
+
+    Piece piece;
+    piece = getPiece(move.from);
+    if (piece == NONE)
+        return;
+    removePiece(piece, move.from);
+
+    if (isOccupied(move.to)) {
+        Piece enemyPiece = getPiece(move.to);
+        removePiece(enemyPiece, move.to);
+    }
+    addPiece(piece, move.to);
+    updateOccupancy();
+
+}
+
+void Board::removePiece(Piece piece, Square square) {
+    if (piece==WHITE_KING) {
+        clearBit(whiteKing, square);
+    } else if (piece==WHITE_QUEEN) {
+        clearBit(whiteQueens, square);
+    } else if (piece==WHITE_BISHOP) {
+        clearBit(whiteBishops, square);
+    } else if (piece==WHITE_ROOK) {
+        clearBit(whiteRooks, square);
+    } else if (piece==WHITE_KNIGHT) {
+        clearBit(whiteKnights, square);
+    } else if (piece==WHITE_PAWN) {
+        clearBit(whitePawns, square);
+    } else if (piece==BLACK_PAWN) {
+        clearBit(blackPawns, square);
+    } else if (piece==BLACK_KNIGHT) {
+        clearBit(blackKnights, square);
+    } else if (piece==BLACK_BISHOP) {
+        clearBit(blackBishops, square);
+    } else if (piece==BLACK_ROOK) {
+        clearBit(blackRooks, square);
+    } else if (piece==BLACK_KING) {
+        clearBit(blackKing, square);
+    } else if (piece==BLACK_QUEEN) {
+        clearBit(blackQueens, square);
+    }
+}
+
+void Board::addPiece(Piece piece, Square square) {
+
+    if (piece == WHITE_KING) {
+        setBit(whiteKing, square);
+    } else if (piece == WHITE_QUEEN) {
+        setBit(whiteQueens, square);
+    } else if (piece == WHITE_BISHOP) {
+        setBit(whiteBishops, square);
+    } else if (piece == WHITE_ROOK) {
+        setBit(whiteRooks, square);
+    } else if (piece == WHITE_KNIGHT) {
+        setBit(whiteKnights, square);
+    } else if (piece == WHITE_PAWN) {
+        setBit(whitePawns, square);
+    } else if (piece == BLACK_PAWN) {
+        setBit(blackPawns, square);
+    } else if (piece == BLACK_KNIGHT) {
+        setBit(blackKnights, square);
+    } else if (piece == BLACK_BISHOP) {
+        setBit(blackBishops, square);
+    } else if (piece == BLACK_ROOK) {
+        setBit(blackRooks, square);
+    } else if (piece == BLACK_KING) {
+        setBit(blackKing, square);
+    } else if (piece == BLACK_QUEEN) {
+        setBit(blackQueens, square);
+    }
+}
+
+void Board::updateOccupancy() {
+
+    whitePieces =
+            whitePawns |
+            whiteKnights |
+            whiteBishops |
+            whiteRooks |
+            whiteQueens |
+            whiteKing;
+
+    blackPieces =
+            blackPawns |
+            blackKnights |
+            blackBishops |
+            blackRooks |
+            blackQueens |
+            blackKing;
+
+    occupied = whitePieces | blackPieces;
+}

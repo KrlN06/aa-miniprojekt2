@@ -6,6 +6,7 @@
 #define PROJEKT2_NALEPA_PETELICKI_BOARD_H
 #include "utils/Types.h"
 #include "pieces/Pieces.h"
+#include "move/Move.h"
 
 
 class Board {
@@ -29,8 +30,15 @@ class Board {
     Bitboard occupied;
 
     void setupStartingPosition();
-    bool isOccupied(int square);
-    Piece getPiece(int square);
+    bool isOccupied(int square) const;
+    Piece getPiece(int square) const;
+    void printBoard() const;
+    bool isWhitePiece(int square) const;
+    bool isBlackPiece(int square) const;
+    void makeMove(const Move& move);
+    void removePiece(Piece piece, Square square);
+    void addPiece(Piece piece, Square square);
+    void updateOccupancy();
 
 };
 

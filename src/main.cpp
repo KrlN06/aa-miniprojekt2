@@ -1,6 +1,7 @@
 
 #include "utils/BitboardUtils.h"
 #include <iostream>
+#include <string>
 #include "board/Board.h"
 #include "validation/MoveValidator.h"
 
@@ -16,50 +17,70 @@ int main()
 
     MoveValidator validator;
 
-    Move move1{E2, E4};
+    bool whiteToMove = true;
 
-    std::cout << "E2 -> E4 legal: "
-              << validator.isMoveLegal(board, move1)
-              << std::endl;
+    while (true) {
 
-    if (validator.isMoveLegal(board, move1)) {
-        board.makeMove(move1);
+        board.printBoard();
+        std::cout << std::endl;
+
+        std::cout << (whiteToMove ? "White" : "Black")
+                  << " move (example: a2a3, q to quit): ";
+
+        std::string input;
+        std::cin >> input;
+
+        if (input == "q") {
+            break;
+        }
+
+        if (input.length() != 4) {
+            std::cout << "Invalid format. Use for example: a2a3\n";
+            continue;
+        }
+
+        int fromFile = input[0] - 'a';
+        int fromRank = input[1] - '1';
+        int toFile = input[2] - 'a';
+        int toRank = input[3] - '1';
+
+        if (fromFile < 0 || fromFile > 7 ||
+            toFile < 0 || toFile > 7 ||
+            fromRank < 0 || fromRank > 7 ||
+            toRank < 0 || toRank > 7) {
+
+            std::cout << "Invalid square.\n";
+            continue;
+        }
+
+        Square from = static_cast<Square>(fromRank * 8 + fromFile);
+        Square to = static_cast<Square>(toRank * 8 + toFile);
+
+        if (!board.isOccupied(from)) {
+            std::cout << "No piece on source square.\n";
+            continue;
+        }
+
+        if (whiteToMove && !board.isWhitePiece(from)) {
+            std::cout << "It is White's turn.\n";
+            continue;
+        }
+
+        if (!whiteToMove && !board.isBlackPiece(from)) {
+            std::cout << "It is Black's turn.\n";
+            continue;
+        }
+
+        Move move{from, to};
+
+        if (!validator.isMoveLegal(board, move)) {
+            std::cout << "Illegal move.\n";
+            continue;
+        }
+
+        board.makeMove(move);
+        whiteToMove = !whiteToMove;
     }
-
-    board.printBoard();
-    std::cout << std::endl;
-
-    Move move2{D7, D5};
-    board.makeMove(move2);
-
-    board.printBoard();
-    std::cout << std::endl;
-
-    Move move3{E4, D5};
-    board.makeMove(move3);
-
-    board.printBoard();
-    std::cout << std::endl;
-
-    Move illegalMove1{A1, A2};
-    std::cout << "A1 -> A2 legal: "
-              << validator.isMoveLegal(board, illegalMove1)
-              << std::endl;
-
-    Move illegalMove2{E3, E5};
-    std::cout << "E3 -> E5 legal: "
-              << validator.isMoveLegal(board, illegalMove2)
-              << std::endl;
-
-    Move knightLegal{B1, C3};
-    std::cout << "B1 -> C3 legal: "
-              << validator.isMoveLegal(board, knightLegal)
-              << std::endl;
-
-    Move knightIllegal{B1, B3};
-    std::cout << "B1 -> B3 legal: "
-              << validator.isMoveLegal(board, knightIllegal)
-              << std::endl;
 
     return 0;
 }

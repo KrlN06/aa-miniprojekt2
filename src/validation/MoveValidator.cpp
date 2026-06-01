@@ -2,7 +2,7 @@
 // Created by Karol Nalepa on 31/05/2026.
 //
 #include <cstdlib>
-#include "MoveValidator.h"
+#include "../../include/validation/MoveValidator.h"
 
 
 #include "board/Board.h"

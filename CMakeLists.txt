@@ -14,7 +14,7 @@ add_executable(Projekt2_Nalepa_Petelicki
     include/move/Move.h
     include/pieces/Pieces.h
     include/utils/BitboardUtils.h
-    include/validation/MoveValidator.cpp
+        src/validation/MoveValidator.cpp
     include/validation/MoveValidator.h
 )
 

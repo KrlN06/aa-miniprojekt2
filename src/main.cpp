@@ -4,6 +4,7 @@
 #include <string>
 #include "board/Board.h"
 #include "validation/MoveValidator.h"
+#include "attack/AttackDetector.h"
 
 int main()
 {
@@ -12,12 +13,29 @@ int main()
 
     board.setupStartingPosition();
 
+    std::cout << "Attack test:\n";
+    std::cout << "C3 attacked by White: "
+              << AttackDetector::isSquareAttacked(board, C3, Color::White)
+              << std::endl;
+
+    std::cout << "E4 attacked by White: "
+              << AttackDetector::isSquareAttacked(board, E4, Color::White)
+              << std::endl;
+
+    std::cout << std::endl;
+
     board.printBoard();
     std::cout << std::endl;
 
     MoveValidator validator;
 
     bool whiteToMove = true;
+
+    Move illegalMove(A2,A5);
+    if (!validator.isMoveLegal(board, illegalMove)) {
+        std::cout << "Illegal move.\n";
+    }
+
 
     while (true) {
 

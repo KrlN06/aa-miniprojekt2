@@ -10,5 +10,9 @@
 #include <cstdint>
 
 using Bitboard = uint64_t;
+enum class Color {
+    White,
+    Black
+};
 
 #endif //PROJEKT2_NALEPA_PETELICKI_TYPES_H

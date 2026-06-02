@@ -16,6 +16,10 @@ add_executable(Projekt2_Nalepa_Petelicki
     include/utils/BitboardUtils.h
         src/validation/MoveValidator.cpp
     include/validation/MoveValidator.h
+        src/attack/AttackDetector.cpp
+        include/attack/AttackDetector.h
+        include/pieces/PieceMovement.h
+        src/pieces/PieceMovement.cpp
 )
 
 target_include_directories(Projekt2_Nalepa_Petelicki PRIVATE include)

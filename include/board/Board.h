@@ -40,6 +40,10 @@ class Board {
     void addPiece(Piece piece, Square square);
     void updateOccupancy();
 
+    static int getRank(Square square);
+    static int getFile(Square square);
+
+
 };
 
 

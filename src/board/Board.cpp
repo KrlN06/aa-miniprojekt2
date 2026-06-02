@@ -4,6 +4,8 @@
 
 #include "board/Board.h"
 #include "utils/BitboardUtils.h"
+#include "../include/validation/MoveValidator.h"
+#include "pieces/PieceMovement.h"
 #include <iostream>
 
 void Board::setupStartingPosition() {
@@ -288,4 +290,15 @@ void Board::updateOccupancy() {
             blackKing;
 
     occupied = whitePieces | blackPieces;
+}
+
+
+
+
+int Board::getRank(Square square) {
+    return square / 8;
+}
+
+int Board::getFile(Square square) {
+    return square % 8;
 }

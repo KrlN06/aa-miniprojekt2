@@ -4,7 +4,10 @@
 #include <cstdlib>
 #include "../../include/validation/MoveValidator.h"
 
+#include <ranges>
 
+
+#include "attack/AttackDetector.h"
 #include "board/Board.h"
 #include "pieces/PieceMovement.h"
 
@@ -26,35 +29,63 @@ bool MoveValidator::isMoveLegal(const Board &board, const Move &move) {
     }
 
     // Dispatch validation based on piece type
+    bool pseudoLegal = false;
+
     Piece piece = board.getPiece(move.from);
     switch (piece) {
         case WHITE_PAWN:
         case BLACK_PAWN:
-            return PieceMovement::isPawnMoveLegal(board, move);
+            pseudoLegal = PieceMovement::isPawnMoveLegal(board, move);
+            break;
 
         case WHITE_KNIGHT:
         case BLACK_KNIGHT:
-            return PieceMovement::isKnightMoveLegal(board, move);
+            pseudoLegal = PieceMovement::isKnightMoveLegal(board, move);
+            break;
 
         case WHITE_BISHOP:
         case BLACK_BISHOP:
-            return PieceMovement::isBishopMoveLegal(board, move);
+            pseudoLegal = PieceMovement::isBishopMoveLegal(board, move);
+            break;
 
         case WHITE_ROOK:
         case BLACK_ROOK:
-            return PieceMovement::isRookMoveLegal(board, move);
+            pseudoLegal = PieceMovement::isRookMoveLegal(board, move);
+            break;
 
         case WHITE_QUEEN:
         case BLACK_QUEEN:
-            return PieceMovement::isQueenMoveLegal(board, move);
+            pseudoLegal = PieceMovement::isQueenMoveLegal(board, move);
+            break;
 
         case WHITE_KING:
         case BLACK_KING:
-            return PieceMovement::isKingMoveLegal(board, move);
+            pseudoLegal = PieceMovement::isKingMoveLegal(board, move);
+            break;
 
         default:
-            return true;
+            pseudoLegal = false;
     }
+
+    if (!pseudoLegal) {
+        return false;
+    }
+
+    Color movingColor;
+
+    if (board.isWhitePiece(move.from))
+        movingColor = Color::White;
+    else
+        movingColor = Color::Black;
+
+    Board copy = board;
+    copy.makeMove(move);
+
+    if (AttackDetector::isKingAttacked(copy,movingColor)) {
+        return false;
+    }
+    return true;
+
 }
 
 

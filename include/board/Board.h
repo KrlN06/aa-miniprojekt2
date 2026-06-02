@@ -40,9 +40,15 @@ class Board {
     void addPiece(Piece piece, Square square);
     void updateOccupancy();
 
+    Square getWhiteKingSquare() const;
+    Square getBlackKingSquare() const;
+
     static int getRank(Square square);
     static int getFile(Square square);
 
+private:
+    Square whiteKingSquare;
+    Square blackKingSquare;
 
 };
 

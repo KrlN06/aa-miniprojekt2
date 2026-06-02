@@ -18,6 +18,11 @@ public:
         Square square,
         Color attackerColor
     );
+
+    static bool isKingAttacked(
+        const Board& board,
+        Color kingColor
+    );
 };
 
 

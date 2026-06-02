@@ -71,6 +71,9 @@ void Board::setupStartingPosition() {
     setBit(blackQueens, D8);
     setBit(blackKing, E8);
 
+    whiteKingSquare = E1;
+    blackKingSquare = E8;
+
     whitePieces =
         whitePawns |
         whiteKnights |
@@ -212,6 +215,12 @@ void Board::makeMove(const Move &move) {
     addPiece(piece, move.to);
     updateOccupancy();
 
+    if (piece == WHITE_KING)
+        whiteKingSquare = move.to;
+
+    if (piece == BLACK_KING)
+        blackKingSquare = move.to;
+
 }
 
 void Board::removePiece(Piece piece, Square square) {
@@ -293,6 +302,13 @@ void Board::updateOccupancy() {
 }
 
 
+Square Board::getWhiteKingSquare() const {
+    return whiteKingSquare;
+}
+
+Square Board::getBlackKingSquare() const {
+    return blackKingSquare;
+}
 
 
 int Board::getRank(Square square) {

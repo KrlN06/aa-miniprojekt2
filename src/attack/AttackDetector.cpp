@@ -72,3 +72,27 @@ bool AttackDetector::isSquareAttacked(
 
     return false;
 }
+
+bool AttackDetector::isKingAttacked(
+    const Board& board,
+    Color kingColor)
+{
+    Square kingSquare;
+
+    if (kingColor == Color::White)
+        kingSquare = board.getWhiteKingSquare();
+    else
+        kingSquare = board.getBlackKingSquare();
+
+    Color attackerColor =
+        (kingColor == Color::White)
+            ? Color::Black
+            : Color::White;
+
+    return isSquareAttacked(
+        board,
+        kingSquare,
+        attackerColor
+    );
+}
+

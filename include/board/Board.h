@@ -43,12 +43,29 @@ class Board {
     Square getWhiteKingSquare() const;
     Square getBlackKingSquare() const;
 
+    bool getWhiteKingMoved() const;
+    bool getBlackKingMoved() const;
+    bool getWhiteKingsideRookMoved() const;
+    bool getBlackKingsideRookMoved() const;
+    bool getWhiteQueensideRookMoved() const;
+    bool getBlackQueensideRookMoved() const;
+    Color getColor(Square square) const;
+
     static int getRank(Square square);
     static int getFile(Square square);
 
 private:
     Square whiteKingSquare;
     Square blackKingSquare;
+
+    bool whiteKingMoved = false;
+    bool blackKingMoved = false;
+
+    bool whiteKingsideRookMoved = false;
+    bool whiteQueensideRookMoved = false;
+
+    bool blackKingsideRookMoved = false;
+    bool blackQueensideRookMoved = false;
 
 };
 

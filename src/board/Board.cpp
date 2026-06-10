@@ -215,11 +215,37 @@ void Board::makeMove(const Move &move) {
     addPiece(piece, move.to);
     updateOccupancy();
 
-    if (piece == WHITE_KING)
-        whiteKingSquare = move.to;
+    if (piece == WHITE_KING) {
 
-    if (piece == BLACK_KING)
+        whiteKingSquare = move.to;
+        whiteKingMoved = true;
+    }
+
+    if (piece == BLACK_KING) {
+
         blackKingSquare = move.to;
+        blackKingMoved = true;
+    }
+
+    if (piece == WHITE_ROOK) {
+
+        if (move.from == A1) {
+            whiteQueensideRookMoved = true;
+        } else if (move.from == H1) {
+            whiteKingsideRookMoved = true;
+        }
+    }
+
+    if (piece == BLACK_ROOK) {
+
+        if (move.from == A8) {
+            blackQueensideRookMoved = true;
+        } else if (move.from == H8) {
+            blackKingsideRookMoved = true;
+        }
+    }
+
+
 
 }
 
@@ -318,3 +344,36 @@ int Board::getRank(Square square) {
 int Board::getFile(Square square) {
     return square % 8;
 }
+
+bool Board::getWhiteKingMoved() const {
+    return whiteKingMoved;
+}
+bool Board::getBlackKingMoved() const{
+    return blackKingMoved;
+}
+
+bool Board::getWhiteKingsideRookMoved() const {
+    return whiteKingsideRookMoved;
+}
+
+bool Board::getBlackKingsideRookMoved() const {
+    return blackKingsideRookMoved;
+}
+
+bool Board::getWhiteQueensideRookMoved() const {
+    return whiteQueensideRookMoved;
+}
+
+bool Board::getBlackQueensideRookMoved() const
+{
+    return blackQueensideRookMoved;
+}
+
+Color Board::getColor(Square square) const {
+    if (isWhitePiece(square)) {
+         return Color::White;
+    } else {
+        return Color::Black;
+    }
+}
+

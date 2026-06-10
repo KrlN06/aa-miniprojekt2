@@ -1,5 +1,8 @@
 #include "pieces/PieceMovement.h"
+
 #include <cmath>
+
+#include "attack/AttackDetector.h"
 
 namespace PieceMovement {
 //
@@ -208,6 +211,118 @@ bool isKingMoveLegal(const Board &board, const Move &move) {
     if (fileDiff <= 1 && rankDiff <= 1) {
         return true;
     }
+
+
+    // CASTLING
+
+    Color kingColor = board.getColor(move.from);
+
+    if (kingColor == Color::White && move.from == E1) { // white king
+
+        // King side castling
+        if (move.to == G1) {
+
+            if (board.getWhiteKingMoved()) {
+                return false;
+            }
+
+            if (board.getWhiteKingsideRookMoved() || board.getPiece(H1) != WHITE_ROOK) {
+                return false;
+            }
+
+            if (board.isOccupied(F1) || board.isOccupied(G1)) {
+                return false;
+            }
+
+            if (AttackDetector::isSquareAttacked(board, E1, Color::Black) ||
+                AttackDetector::isSquareAttacked(board, F1, Color::Black) ||
+                AttackDetector::isSquareAttacked(board, G1, Color::Black)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        // Queen side castling
+        if (move.to == C1) {
+
+            if (board.getWhiteKingMoved()) {
+                return false;
+            }
+
+            if (board.getWhiteQueensideRookMoved() || board.getPiece(A1) != WHITE_ROOK) {
+                return false;
+            }
+
+            if (board.isOccupied(B1) ||
+                board.isOccupied(C1) ||
+                board.isOccupied(D1)) {
+                return false;
+            }
+
+            if (AttackDetector::isSquareAttacked(board, E1, Color::Black) ||
+                AttackDetector::isSquareAttacked(board, D1, Color::Black) ||
+                AttackDetector::isSquareAttacked(board, C1, Color::Black)) {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    if (kingColor == Color::Black && move.from == E8) { // black king
+
+        // King side castling
+        if (move.to == G8) {
+
+            if (board.getBlackKingMoved()) {
+                return false;
+            }
+
+            if (board.getBlackKingsideRookMoved() || board.getPiece(H8) != BLACK_ROOK) {
+                return false;
+            }
+
+            if (board.isOccupied(F8) || board.isOccupied(G8)) {
+                return false;
+            }
+
+            if (AttackDetector::isSquareAttacked(board, E8, Color::White) ||
+                AttackDetector::isSquareAttacked(board, F8, Color::White) ||
+                AttackDetector::isSquareAttacked(board, G8, Color::White)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        // Queen side castling
+        if (move.to == C8) {
+
+            if (board.getBlackKingMoved()) {
+                return false;
+            }
+
+            if (board.getBlackQueensideRookMoved() || board.getPiece(A8) != BLACK_ROOK) {
+                return false;
+            }
+
+            if (board.isOccupied(B8) ||
+                board.isOccupied(C8) ||
+                board.isOccupied(D8)) {
+                return false;
+            }
+
+            if (AttackDetector::isSquareAttacked(board, E8, Color::White) ||
+                AttackDetector::isSquareAttacked(board, D8, Color::White) ||
+                AttackDetector::isSquareAttacked(board, C8, Color::White)) {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
 
     return false;
 }

@@ -20,6 +20,8 @@ add_executable(Projekt2_Nalepa_Petelicki
         include/attack/AttackDetector.h
         include/pieces/PieceMovement.h
         src/pieces/PieceMovement.cpp
+        src/rules/GameRules.cpp
+        include/rules/GameRules.h
 )
 
 target_include_directories(Projekt2_Nalepa_Petelicki PRIVATE include)

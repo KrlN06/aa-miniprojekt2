@@ -32,6 +32,44 @@ bool MoveValidator::isMoveLegal(const Board &board, const Move &move) {
     bool pseudoLegal = false;
 
     Piece piece = board.getPiece(move.from);
+
+    // Capturing the king is not allowed
+    if (board.isOccupied(move.to)) {
+        Piece targetPiece = board.getPiece(move.to);
+        if (targetPiece == WHITE_KING ||
+            targetPiece == BLACK_KING) {
+            return false;
+        }
+    }
+    // Promotion validation
+    if (piece == WHITE_PAWN && Board::getRank(move.to) == 7) {
+
+        if (move.promotionPiece != WHITE_QUEEN &&
+            move.promotionPiece != WHITE_ROOK &&
+            move.promotionPiece != WHITE_BISHOP &&
+            move.promotionPiece != WHITE_KNIGHT) {
+            return false;
+        }
+    }
+
+    if (piece == BLACK_PAWN && Board::getRank(move.to) == 0) {
+
+        if (move.promotionPiece != BLACK_QUEEN &&
+            move.promotionPiece != BLACK_ROOK &&
+            move.promotionPiece != BLACK_BISHOP &&
+            move.promotionPiece != BLACK_KNIGHT) {
+            return false;
+        }
+    }
+
+    // Promotion piece may only be provided on promotion moves
+    if (move.promotionPiece != NONE) {
+
+        if (!(piece == WHITE_PAWN && Board::getRank(move.to) == 7) &&
+            !(piece == BLACK_PAWN && Board::getRank(move.to) == 0)) {
+            return false;
+        }
+    }
     switch (piece) {
         case WHITE_PAWN:
         case BLACK_PAWN:

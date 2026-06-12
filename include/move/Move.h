@@ -11,7 +11,8 @@
 struct Move {
     Square from;
     Square to;
-};
+    Piece promotionPiece = NONE;
+};  
 
 
 #endif //PROJEKT2_NALEPA_PETELICKI_MOVE_H

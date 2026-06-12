@@ -7,6 +7,7 @@
 #include "../include/validation/MoveValidator.h"
 #include "pieces/PieceMovement.h"
 #include <iostream>
+#include <stdexcept>
 
 void Board::setupStartingPosition() {
 
@@ -73,6 +74,7 @@ void Board::setupStartingPosition() {
 
     whiteKingSquare = E1;
     blackKingSquare = E8;
+    enPassantSquare = NO_SQUARE;
 
     whitePieces =
         whitePawns |
@@ -212,8 +214,69 @@ void Board::makeMove(const Move &move) {
         Piece enemyPiece = getPiece(move.to);
         removePiece(enemyPiece, move.to);
     }
+
+    // En passant capture
+    if (piece == WHITE_PAWN &&
+        move.to == enPassantSquare &&
+        !isOccupied(move.to))
+    {
+        removePiece(BLACK_PAWN,
+                    static_cast<Square>(move.to - 8));
+    }
+
+    if (piece == BLACK_PAWN &&
+        move.to == enPassantSquare &&
+        !isOccupied(move.to))
+    {
+        removePiece(WHITE_PAWN,
+                    static_cast<Square>(move.to + 8));
+    }
+
     addPiece(piece, move.to);
+
+    // Castling rook move
+    if (piece == WHITE_KING) {
+
+        if (move.from == E1 && move.to == G1) {
+            removePiece(WHITE_ROOK, H1);
+            addPiece(WHITE_ROOK, F1);
+        }
+        else if (move.from == E1 && move.to == C1) {
+            removePiece(WHITE_ROOK, A1);
+            addPiece(WHITE_ROOK, D1);
+        }
+    }
+
+    if (piece == BLACK_KING) {
+
+        if (move.from == E8 && move.to == G8) {
+            removePiece(BLACK_ROOK, H8);
+            addPiece(BLACK_ROOK, F8);
+        }
+        else if (move.from == E8 && move.to == C8) {
+            removePiece(BLACK_ROOK, A8);
+            addPiece(BLACK_ROOK, D8);
+        }
+    }
+
     updateOccupancy();
+
+    // En passant target square
+    enPassantSquare = NO_SQUARE;
+
+    if (piece == WHITE_PAWN &&
+        getRank(move.to) - getRank(move.from) == 2)
+    {
+        enPassantSquare =
+            static_cast<Square>((move.from + move.to) / 2);
+    }
+
+    if (piece == BLACK_PAWN &&
+        getRank(move.from) - getRank(move.to) == 2)
+    {
+        enPassantSquare =
+            static_cast<Square>((move.from + move.to) / 2);
+    }
 
     if (piece == WHITE_KING) {
 
@@ -245,7 +308,16 @@ void Board::makeMove(const Move &move) {
         }
     }
 
-
+    if (piece == WHITE_PAWN && getRank(move.to) == 7) {
+        removePiece(WHITE_PAWN, move.to);
+        addPiece(move.promotionPiece, move.to);
+        updateOccupancy();
+    }
+    if (piece == BLACK_PAWN && getRank(move.to) == 0) {
+        removePiece(BLACK_PAWN, move.to);
+        addPiece(move.promotionPiece, move.to);
+        updateOccupancy();
+    }
 
 }
 
@@ -370,10 +442,19 @@ bool Board::getBlackQueensideRookMoved() const
 }
 
 Color Board::getColor(Square square) const {
+
     if (isWhitePiece(square)) {
-         return Color::White;
-    } else {
+        return Color::White;
+    }
+
+    if (isBlackPiece(square)) {
         return Color::Black;
     }
+
+    throw std::runtime_error("Square is empty");
 }
 
+Square Board::getEnPassantSquare() const
+{
+    return enPassantSquare;
+}

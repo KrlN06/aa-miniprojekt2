@@ -9,7 +9,7 @@
 #include "move/Move.h"
 
 
-class Board {
+class  Board {
 
     public:
     Bitboard whitePawns;
@@ -51,12 +51,15 @@ class Board {
     bool getBlackQueensideRookMoved() const;
     Color getColor(Square square) const;
 
+    Square getEnPassantSquare() const;
+
     static int getRank(Square square);
     static int getFile(Square square);
 
 private:
     Square whiteKingSquare;
     Square blackKingSquare;
+    Square enPassantSquare = NO_SQUARE;
 
     bool whiteKingMoved = false;
     bool blackKingMoved = false;

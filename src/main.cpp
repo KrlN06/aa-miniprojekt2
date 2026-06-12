@@ -1,105 +1,42 @@
-
 #include "utils/BitboardUtils.h"
 #include <iostream>
 #include <string>
 #include "board/Board.h"
 #include "validation/MoveValidator.h"
-#include "attack/AttackDetector.h"
+#include "rules/GameRules.h"
 
 int main()
 {
-
     Board board;
-
-    board.setupStartingPosition();
-
-    std::cout << "Attack test:\n";
-    std::cout << "C3 attacked by White: "
-              << AttackDetector::isSquareAttacked(board, C3, Color::White)
-              << std::endl;
-
-    std::cout << "E4 attacked by White: "
-              << AttackDetector::isSquareAttacked(board, E4, Color::White)
-              << std::endl;
-
-    std::cout << std::endl;
-
-    board.printBoard();
-    std::cout << std::endl;
-
     MoveValidator validator;
 
-    bool whiteToMove = true;
+    // Stalemate test position
+    // Jeśli Board domyślnie tworzy pustą planszę,
+    // nie potrzebujemy setupStartingPosition() ani clear().
+    board = Board();
 
-    Move illegalMove(A2,A5);
-    if (!validator.isMoveLegal(board, illegalMove)) {
-        std::cout << "Illegal move.\n";
-    }
+    board.addPiece(WHITE_KING, C6);
+    board.addPiece(WHITE_QUEEN, C7);
+    board.addPiece(BLACK_KING, A8);
 
+    board.updateOccupancy();
 
-    while (true) {
+    std::cout << "Stalemate position:\n";
+    board.printBoard();
 
-        board.printBoard();
-        std::cout << std::endl;
+    std::cout << std::boolalpha;
 
-        std::cout << (whiteToMove ? "White" : "Black")
-                  << " move (example: a2a3, q to quit): ";
+    std::cout << "\nBlack has legal move: "
+              << GameRules::hasAnyLegalMove(board, Color::Black)
+              << std::endl;
 
-        std::string input;
-        std::cin >> input;
+    std::cout << "Black checkmate: "
+              << GameRules::isCheckmate(board, Color::Black)
+              << std::endl;
 
-        if (input == "q") {
-            break;
-        }
-
-        if (input.length() != 4) {
-            std::cout << "Invalid format. Use for example: a2a3\n";
-            continue;
-        }
-
-        int fromFile = input[0] - 'a';
-        int fromRank = input[1] - '1';
-        int toFile = input[2] - 'a';
-        int toRank = input[3] - '1';
-
-        if (fromFile < 0 || fromFile > 7 ||
-            toFile < 0 || toFile > 7 ||
-            fromRank < 0 || fromRank > 7 ||
-            toRank < 0 || toRank > 7) {
-
-            std::cout << "Invalid square.\n";
-            continue;
-        }
-
-        Square from = static_cast<Square>(fromRank * 8 + fromFile);
-        Square to = static_cast<Square>(toRank * 8 + toFile);
-
-        if (!board.isOccupied(from)) {
-            std::cout << "No piece on source square.\n";
-            continue;
-        }
-
-        if (whiteToMove && !board.isWhitePiece(from)) {
-            std::cout << "It is White's turn.\n";
-            continue;
-        }
-
-        if (!whiteToMove && !board.isBlackPiece(from)) {
-            std::cout << "It is Black's turn.\n";
-            continue;
-        }
-
-        Move move{from, to};
-
-        if (!validator.isMoveLegal(board, move)) {
-            std::cout << "Illegal move.\n";
-            continue;
-        }
-
-        board.makeMove(move);
-        whiteToMove = !whiteToMove;
-    }
+    std::cout << "Black stalemate: "
+              << GameRules::isStalemate(board, Color::Black)
+              << std::endl;
 
     return 0;
 }
-

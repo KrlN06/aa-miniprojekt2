@@ -23,6 +23,14 @@ bool isPawnMoveLegal(const Board &board, const Move &move) {
             return true;
         }
 
+        // en passant
+        if (move.to == board.getEnPassantSquare() &&
+            rankDiff == 1 &&
+            std::abs(fileDiff) == 1)
+        {
+            return true;
+        }
+
         // 1st rank special move
         if (rankDiff == 2 && fileDiff == 0) {
 
@@ -60,6 +68,14 @@ bool isPawnMoveLegal(const Board &board, const Move &move) {
 
         // capture handle
         if (board.isWhitePiece(move.to) && rankDiff == -1 && std::abs(fileDiff) == 1)
+        {
+            return true;
+        }
+
+        // en passant
+        if (move.to == board.getEnPassantSquare() &&
+            rankDiff == -1 &&
+            std::abs(fileDiff) == 1)
         {
             return true;
         }

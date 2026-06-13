@@ -4,7 +4,6 @@
 
 #include "board/Board.h"
 #include "utils/BitboardUtils.h"
-#include "../include/validation/MoveValidator.h"
 #include "pieces/PieceMovement.h"
 #include <iostream>
 #include <stdexcept>
@@ -154,35 +153,37 @@ Piece Board::getPiece(int square) const {
 }
 
 void Board::printBoard() const {
+    std::cout << "  A B C D E F G H" << std::endl;
     for (int rank = 7; rank >= 0; rank--) {
+        std::cout << rank + 1 << " ";
         for (int file = 0; file < 8; file++) {
             int square = rank * 8 + file;
             Piece piece = getPiece(square);
 
             if (piece == WHITE_KING) {
-                std::cout << "K ";
+                std::cout << "♚ ";
             } else if (piece == WHITE_QUEEN) {
-                std::cout << "Q ";
+                std::cout << "♛ ";
             } else if (piece == WHITE_BISHOP) {
-                std::cout << "B ";
+                std::cout << "♝ ";
             } else if (piece == WHITE_ROOK) {
-                std::cout << "R ";
+                std::cout << "♜ ";
             } else if (piece == WHITE_KNIGHT) {
-                std::cout << "N ";
+                std::cout << "♞ ";
             } else if (piece == WHITE_PAWN) {
-                std::cout << "P ";
+                std::cout << "♟ ";
             } else if (piece == BLACK_PAWN) {
-                std::cout << "p ";
+                std::cout << "♙ ";
             } else if (piece == BLACK_KNIGHT) {
-                std::cout << "n ";
+                std::cout << "♘ ";
             } else if (piece == BLACK_BISHOP) {
-                std::cout << "b ";
+                std::cout << "♗ ";
             } else if (piece == BLACK_ROOK) {
-                std::cout << "r ";
+                std::cout << "♖ ";
             } else if (piece == BLACK_KING) {
-                std::cout << "k ";
+                std::cout << "♔ ";
             } else if (piece == BLACK_QUEEN) {
-                std::cout << "q ";
+                std::cout << "♕ ";
             } else {
                 std::cout << ". ";
             }
@@ -190,6 +191,7 @@ void Board::printBoard() const {
 
         std::cout << std::endl;
     }
+    std::cout << "  A B C D E F G H" << std::endl;
 }
 
 bool Board::isWhitePiece(int square) const

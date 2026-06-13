@@ -4,39 +4,75 @@
 #include "board/Board.h"
 #include "validation/MoveValidator.h"
 #include "rules/GameRules.h"
+#include "engine/Engine.h"
+#include "move/Move.h"
+#include "utils/BitboardUtils.h"
+#include "board/Square.h"
 
 int main()
 {
     Board board;
     MoveValidator validator;
 
-    // Stalemate test position
-    // Jeśli Board domyślnie tworzy pustą planszę,
-    // nie potrzebujemy setupStartingPosition() ani clear().
-    board = Board();
+    board.setupStartingPosition();
 
-    board.addPiece(WHITE_KING, C6);
-    board.addPiece(WHITE_QUEEN, C7);
-    board.addPiece(BLACK_KING, A8);
+    Color humanColor = Color::White;
+    Color aiColor = Color::Black;
 
-    board.updateOccupancy();
+    while (true)
+    {
+        board.printBoard();
 
-    std::cout << "Stalemate position:\n";
-    board.printBoard();
+        if (GameRules::isCheckmate(board, humanColor)) {
+            std::cout << "Checkmate! Computer wins.\n";
+            break;
+        }
 
-    std::cout << std::boolalpha;
+        if (GameRules::isCheckmate(board, aiColor)) {
+            std::cout << "Checkmate! You win.\n";
+            break;
+        }
 
-    std::cout << "\nBlack has legal move: "
-              << GameRules::hasAnyLegalMove(board, Color::Black)
-              << std::endl;
+        if (GameRules::isStalemate(board, humanColor) ||
+            GameRules::isStalemate(board, aiColor)) {
+            std::cout << "Stalemate!\n";
+            break;
+        }
 
-    std::cout << "Black checkmate: "
-              << GameRules::isCheckmate(board, Color::Black)
-              << std::endl;
+        std::string fromStr;
+        std::string toStr;
 
-    std::cout << "Black stalemate: "
-              << GameRules::isStalemate(board, Color::Black)
-              << std::endl;
+        std::cout << "Your move (example: E2 E4): ";
+        std::cin >> fromStr >> toStr;
+
+        Square from = stringToSquare(fromStr);
+        Square to = stringToSquare(toStr);
+
+        Move humanMove{from, to};
+
+        if (!validator.isMoveLegal(board, humanMove)) {
+            std::cout << "Illegal move!\n";
+            continue;
+        }
+
+        board.makeMove(humanMove);
+
+        if (GameRules::isCheckmate(board, aiColor)) {
+            board.printBoard();
+            std::cout << "Checkmate! You win.\n";
+            break;
+        }
+
+        Move aiMove = Engine::getBestMove(board, aiColor, 3);
+
+        std::cout << "Computer move: "
+                  << squareToString(aiMove.from)
+                  << " -> "
+                  << squareToString(aiMove.to)
+                  << std::endl;
+
+        board.makeMove(aiMove);
+    }
 
     return 0;
 }

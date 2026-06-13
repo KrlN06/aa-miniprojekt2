@@ -2,7 +2,7 @@
 // Created by Karol Nalepa on 31/05/2026.
 //
 #include <cstdlib>
-#include "../../include/validation/MoveValidator.h"
+#include "validation/MoveValidator.h"
 
 #include <ranges>
 
@@ -143,6 +143,5 @@ bool MoveValidator::isOwnPieceOnTarget(const Board &board, const Move &move) {
     }
     return false;
 }
-
 
 

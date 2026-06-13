@@ -5,9 +5,7 @@
 #ifndef PROJEKT2_NALEPA_PETELICKI_GAMERULES_H
 #define PROJEKT2_NALEPA_PETELICKI_GAMERULES_H
 
-
-
-#include "../board/Board.h"
+#include "board/Board.h"
 
 class GameRules {
 public:

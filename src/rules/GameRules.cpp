@@ -2,9 +2,9 @@
 // Created by Karol Nalepa on 12/06/2026.
 //
 
-#include "../../include/rules/GameRules.h"
-#include "../../include/validation/MoveValidator.h"
-#include "../../include/attack/AttackDetector.h"
+#include "rules/GameRules.h"
+#include "validation/MoveValidator.h"
+#include "attack/AttackDetector.h"
 
 bool GameRules::hasAnyLegalMove(const Board& board, Color color)
 {

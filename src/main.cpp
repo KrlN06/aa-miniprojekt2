@@ -16,7 +16,7 @@ int main()
 {
     constexpr int GAME_MODE = 2; // 1=PVP, 2=PvsAI, 3=AIvsAI
     constexpr Color HUMAN_COLOR = Color::White;
-    constexpr int AI_DEPTH = 3;
+    constexpr int AI_DEPTH = 5;
     constexpr int AI1_DEPTH = 3;
     constexpr int AI2_DEPTH = 3;
 
